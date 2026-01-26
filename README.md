@@ -10,3 +10,8 @@ npx create-next-app@latest . --yes
 ```bash
 npm create storybook@latest
 ```
+
+## taskboxのインストール
+```bash
+npx degit chromaui/intro-storybook-react-template taskbox
+```
