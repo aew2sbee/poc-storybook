@@ -23,23 +23,27 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     variant: "primary",
+    children: "保存",
   },
 };
 
 export const Secondary: Story = {
   args: {
     variant: "secondary",
+    children: "保存",
   },
 };
 
 export const Large: Story = {
   args: {
     size: "large",
+    children: "保存",
   },
 };
 
 export const Small: Story = {
   args: {
     size: "small",
+    children: "保存",
   },
 };

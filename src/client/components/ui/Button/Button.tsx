@@ -20,12 +20,15 @@ export function Button({
   variant = "primary",
   size = "medium",
   className = "",
+  children,
   ...props
 }: ButtonProps) {
   return (
     <button
       className={`btn ${variantMap[variant]} ${sizeMap[size]} ${className}`}
       {...props}
-    />
+    >
+      {children}
+    </button>
   );
 }
