@@ -1,17 +1,24 @@
 # tech-storybook
 Storybookについて検証する
 
-## Next.jsのインストール
+## インストール
+Next.js
 ```bash
 npx create-next-app@latest .
 ```
 
-## Storybookのインストール
+Storybook
 ```bash
 npm create storybook@latest
 ```
 
-## taskboxのインストール
+taskbox
 ```bash
 npx degit chromaui/intro-storybook-react-template taskbox
+```
+
+## 実行
+
+```bash
+npm run storybook
 ```
