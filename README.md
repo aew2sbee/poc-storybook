@@ -3,7 +3,7 @@ Storybookについて検証する
 
 ## Next.jsのインストール
 ```bash
-npx create-next-app@latest . --yes
+npx create-next-app@latest .
 ```
 
 ## Storybookのインストール
