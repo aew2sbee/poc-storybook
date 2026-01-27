@@ -1,45 +1,80 @@
+# ================================
+# GitHub Pages に Storybook を公開するワークフロー
+# - main ブランチに push されたら自動デプロイ
+# - 手動実行（workflow_dispatch）も可能
+# ================================
 name: Deploy Storybook to GitHub Pages
 
+# いつ実行するか（トリガー）
 on:
+  # main ブランチに push されたら実行
   push:
     branches: [main]
+
+  # GitHub 画面から「Run workflow」で手動実行もできる
   workflow_dispatch:
 
+# GitHub Pages にデプロイするために必要な権限
+# （GitHub Actions から Pages に書き込むため）
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read   # リポジトリの中身を読み取る（checkout に必要）
+  pages: write     # GitHub Pages へデプロイする権限
+  id-token: write  # OIDC で deploy-pages が認証するために必要
 
+# 同時に複数デプロイが走ると競合しやすいので、1つにまとめる設定
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
+  # ----------------------------
+  # 1) build: Storybook をビルドして成果物（静的ファイル）を用意する
+  # ----------------------------
   build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      # (1) リポジトリのコードを Actions の実行環境に取得する
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # (2) Node.js をセットアップする（Storybook を動かすため）
+      # cache: npm にすると npm の依存関係キャッシュが効いて速くなりやすい
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
 
-      - run: npm ci
+      # (3) 依存関係をインストールする
+      # npm ci は package-lock.json を基準に「再現性高く」インストールするコマンド
+      - name: Install dependencies
+        run: npm ci
 
+      # (4) Storybook を「静的サイト」としてビルドする
+      # 通常、storybook-static/ というフォルダにHTML/CSS/JSが出力される
       - name: Build Storybook
         run: npm run build-storybook
 
-      - name: Upload Pages artifact
+      # (5) build の成果物（storybook-static）を GitHub Pages 用の artifact としてアップロード
+      # 後続の deploy ジョブがこの artifact を使ってデプロイする
+      - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v4
         with:
           path: storybook-static
 
+  # ----------------------------
+  # 2) deploy: build の成果物を GitHub Pages にデプロイする
+  # ----------------------------
   deploy:
-    needs: build
+    needs: build            # build が成功してから deploy を実行する
     runs-on: ubuntu-latest
+
+    # GitHub Pages 用の environment を使う（Pages のURLなどが紐づく）
     environment:
       name: github-pages
+
     steps:
+      # artifact を GitHub Pages にデプロイする公式アクション
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
