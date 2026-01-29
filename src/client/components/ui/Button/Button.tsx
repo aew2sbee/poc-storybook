@@ -14,7 +14,7 @@ const colorMap = {
 
 const sizeMap = {
   small: "h-8 px-4 text-xs",
-  medium: "h-10 px-5 text-sm",
+  medium: "h-10 px-6 text-sm",
   large: "h-12 px-6 text-base",
 } as const;
 
