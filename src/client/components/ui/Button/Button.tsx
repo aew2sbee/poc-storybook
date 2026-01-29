@@ -8,7 +8,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 const BASE = "inline-flex items-center justify-center gap-2 rounded-full font-bold leading-none transition select-none";
 
 const colorMap = {
-  primary: "bg-pink-400 text-white hover:bg-pink-500 active:bg-pink-600",
+  primary: "bg-sky-400 text-white hover:bg-sky-500 active:bg-sky-600",
   secondary: "border border-slate-300 bg-white text-slate-900 hover:bg-slate-50 active:bg-slate-100",
 } as const;
 
