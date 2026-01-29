@@ -46,25 +46,28 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
 
-      # (5) ブランチ名から公開先フォルダ名を作る
-      # - main: ルートに置くので "."
-      # - それ以外: ブランチ名をフォルダ名にする
-      #   （/ を含むとフォルダが深くなるので、ここでは "-" に置換して1階層にしています）
+      # (5) ブランチ名から公開先フォルダ名を作る（main 以外だけ使う）
       - name: Decide destination directory
         id: dest
+        if: github.ref_name != 'main'
         run: |
           BRANCH="${GITHUB_REF_NAME}"
-          if [ "$BRANCH" = "main" ]; then
-            echo "dir=." >> $GITHUB_OUTPUT
-          else
-            SAFE_BRANCH="$(echo "$BRANCH" | sed 's/\//-/g')"
-            echo "dir=$SAFE_BRANCH" >> $GITHUB_OUTPUT
-          fi
+          SAFE_BRANCH="$(echo "$BRANCH" | sed 's/\//-/g')"
+          echo "dir=$SAFE_BRANCH" >> $GITHUB_OUTPUT
 
-      # (6) gh-pages ブランチへデプロイ
-      # - destination_dir: 配置先フォルダ
-      # - keep_files: true にすると、他ブランチのフォルダを消さずに残せる
-      - name: Deploy to gh-pages (keep other branches)
+      # main: ルートへ（destination_dir を指定しない）
+      - name: Deploy main to gh-pages root
+        if: github.ref_name == 'main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: storybook-static
+          keep_files: true
+
+      # main 以外: サブディレクトリへ
+      - name: Deploy branch to subdir
+        if: github.ref_name != 'main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
