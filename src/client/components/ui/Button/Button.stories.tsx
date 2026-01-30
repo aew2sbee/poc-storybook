@@ -25,36 +25,38 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const LABEL = "ログイン";
+
 export const ColorPrimary: Story = {
   args: {
     color: "primary",
-    children: "ログイン",
+    children: LABEL,
   },
 };
 
 export const ColorSecondary: Story = {
   args: {
     color: "secondary",
-    children: "ログイン",
+    children: LABEL,
   },
 };
 
 export const SizeLarge: Story = {
   args: {
     size: "large",
-    children: "ログイン",
+    children: LABEL,
   },
 };
 
 export const SizeMedium: Story = {
   args: {
-    children: "ログイン",
+    children: LABEL,
   },
 };
 
 export const SizeSmall: Story = {
   args: {
     size: "small",
-    children: "ログイン",
+    children: LABEL,
   },
 };

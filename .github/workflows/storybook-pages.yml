@@ -12,6 +12,8 @@ on:
       - main
       - develop
       - "feature/**"
+    paths:
+      - "src/client/components/**"
   workflow_dispatch:
 
 # gh-pages ブランチへ push するので write が必要
